@@ -1,14 +1,9 @@
-using Restaurants.API.Services;
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-// Register GUID service
-builder.Services.AddScoped<IGuidService, GuidService>();
 
 var app = builder.Build();
 
