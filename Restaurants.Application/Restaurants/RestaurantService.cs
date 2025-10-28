@@ -11,4 +11,10 @@ public class RestaurantService(IRestaurantsRepository restaurantsRepository, ILo
         logger.LogInformation("Getting all restaurants");
         return restaurantsRepository.GetAllAsync();
     }
+
+    public Task<Restaurant?> GetRestaurantByIdAsync(int id)
+    {
+        logger.LogInformation("Getting restaurant by id");
+        return restaurantsRepository.GetByIdAsync(id);
+    }
 }

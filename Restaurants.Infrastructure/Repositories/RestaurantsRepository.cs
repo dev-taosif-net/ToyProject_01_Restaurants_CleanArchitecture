@@ -12,4 +12,10 @@ public class RestaurantsRepository(RestaurantsDbContext dbContext) : IRestaurant
         var restaurants = await dbContext.Restaurants.ToListAsync();
         return restaurants ?? [];
     }
+
+    public async Task<Restaurant?> GetByIdAsync(int id)
+    {
+        var restaurant = await dbContext.Restaurants.FindAsync(id);
+        return restaurant;
+    }
 }
