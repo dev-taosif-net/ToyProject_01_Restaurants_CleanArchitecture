@@ -53,7 +53,7 @@ namespace Restaurants.Infrastructure.Migrations
                     b.ToTable("Dishes");
                 });
 
-            modelBuilder.Entity("Restaurants.Domain.Entities.Restaurant", b =>
+            modelBuilder.Entity("Restaurants.Domain.Entities.RestaurantDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,14 +89,14 @@ namespace Restaurants.Infrastructure.Migrations
 
             modelBuilder.Entity("Restaurants.Domain.Entities.Dish", b =>
                 {
-                    b.HasOne("Restaurants.Domain.Entities.Restaurant", null)
+                    b.HasOne("Restaurants.Domain.Entities.RestaurantDto", null)
                         .WithMany("Dishes")
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Restaurants.Domain.Entities.Restaurant", b =>
+            modelBuilder.Entity("Restaurants.Domain.Entities.RestaurantDto", b =>
                 {
                     b.OwnsOne("Restaurants.Domain.Entities.Address", "Address", b1 =>
                         {
@@ -123,7 +123,7 @@ namespace Restaurants.Infrastructure.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("Restaurants.Domain.Entities.Restaurant", b =>
+            modelBuilder.Entity("Restaurants.Domain.Entities.RestaurantDto", b =>
                 {
                     b.Navigation("Dishes");
                 });
