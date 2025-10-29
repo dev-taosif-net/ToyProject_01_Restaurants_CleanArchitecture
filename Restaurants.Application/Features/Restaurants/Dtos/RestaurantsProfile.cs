@@ -7,6 +7,16 @@ public class RestaurantsProfile : Profile
     public RestaurantsProfile()
     {
 
+        CreateMap<CreateRestaurantDto, Domain.Entities.Restaurant>()
+            .ForMember(dest => dest.Address,
+                       opt => opt.MapFrom(src => new Domain.Entities.Address
+                       {
+                           City = src.City,
+                           Street = src.Street,
+                           PostalCode = src.PostalCode
+                       }));
+
+
         // Left will be source and right will be destination
         CreateMap<Domain.Entities.Restaurant, RestaurantDto>()
             .ForMember(dest => dest.Dishes,
