@@ -16,10 +16,11 @@ namespace Restaurants.API.Controllers
             var restaurants = await mediator.Send(new GetAllRestaurantsQuery());
             return Ok(restaurants);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRestaurantById([FromRoute] int id)
         {
-            var restaurant = await restaurantService.GetRestaurantByIdAsync(id);
+            var restaurant = await mediator.Send(new GetRestaurantById() { Id = id});
 
             return restaurant == null ? BadRequest() : Ok(restaurant);
         }
