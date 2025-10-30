@@ -28,17 +28,17 @@ namespace Restaurants.API.Controllers
         {
             //var validationResult = await _validator.ValidateAsync(createRestaurant);
 
-            var validator = new CreateRestaurantDtoValidator();
-            var validationResult = await validator.ValidateAsync(createRestaurant);
+            //var validator = new CreateRestaurantDtoValidator();
+            //var validationResult = await validator.ValidateAsync(createRestaurant);
 
-            if (!validationResult.IsValid)
-            {
-                foreach (var error in validationResult.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
-                return BadRequest(ModelState);
-            }
+            //if (!validationResult.IsValid)
+            //{
+            //    foreach (var error in validationResult.Errors)
+            //    {
+            //        ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            //    }
+            //    //return BadRequest(ModelState);
+            //}
             ////Default model validation
             //if(!ModelState.IsValid)
             //{
