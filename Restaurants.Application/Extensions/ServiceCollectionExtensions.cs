@@ -19,8 +19,5 @@ public static class ServiceCollectionExtensions
             .AddFluentValidationAutoValidation();
 
 
-
-        //Services
-        services.AddScoped<IRestaurantService, RestaurantService>();
     }
 }
