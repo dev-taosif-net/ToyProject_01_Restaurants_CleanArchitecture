@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Restaurants.Application.Features.Restaurants;
-using AutoMapper;
+using System.Reflection;
 
 namespace Restaurants.Application.Extensions;
 
@@ -10,6 +11,9 @@ public static class ServiceCollectionExtensions
     {
         var applicationAssembly = typeof(ServiceCollectionExtensions).Assembly;
         services.AddAutoMapper(cfg => { }, applicationAssembly);
+
+        services.AddValidatorsFromAssembly(applicationAssembly);
+
 
 
         //Services

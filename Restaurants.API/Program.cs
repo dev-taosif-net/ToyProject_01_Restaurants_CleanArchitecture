@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Builder;
 using Restaurants.Application.Extensions;
 using Restaurants.Infrastructure.Extensions;
 using Restaurants.Infrastructure.Seeders;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,11 +23,11 @@ await seeder.Seed();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseOpenApi(); 
+    app.UseOpenApi();
     app.UseSwaggerUi(options =>
     {
         options.DocumentPath = "/openapi/v1.json";
-        options.Path = "/swagger"; 
+        options.Path = "/swagger";
     });
 }
 
