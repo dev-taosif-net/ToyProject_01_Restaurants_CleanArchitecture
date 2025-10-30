@@ -1,13 +1,16 @@
 ﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Features.Restaurants;
+using Restaurants.Application.Features.Restaurants.Commands;
 using Restaurants.Application.Features.Restaurants.Dtos;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Restaurants.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RestaurantsController(IRestaurantService restaurantService , IValidator<CreateRestaurantDto> _validator) : ControllerBase
+    public class RestaurantsController(IRestaurantService restaurantService , IMediator mediator) : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetAllRestaurants()
@@ -24,7 +27,7 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRestaurant([FromBody] CreateRestaurantDto createRestaurant)
+        public async Task<IActionResult> CreateRestaurant([FromBody] CreateRestaurantCommand command)
         {
             //var validationResult = await _validator.ValidateAsync(createRestaurant);
 
@@ -45,8 +48,8 @@ namespace Restaurants.API.Controllers
             //    return BadRequest(createRestaurant);
             //}
 
-            var id = await restaurantService.CreateRestaurantAsync(createRestaurant);
-            return CreatedAtAction(nameof(GetRestaurantById), new { id = id }, null);
+            var id = await mediator.Send(command);
+            return CreatedAtAction(nameof(GetRestaurantById), new { id }, null);
         }
 
     }

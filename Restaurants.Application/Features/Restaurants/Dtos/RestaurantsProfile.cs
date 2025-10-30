@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Restaurants.Application.Features.Restaurants.Commands;
 
 namespace Restaurants.Application.Features.Restaurants.Dtos;
 
@@ -7,7 +8,7 @@ public class RestaurantsProfile : Profile
     public RestaurantsProfile()
     {
 
-        CreateMap<CreateRestaurantDto, Domain.Entities.Restaurant>()
+        CreateMap<CreateRestaurantCommand, Domain.Entities.Restaurant>()
             .ForMember(dest => dest.Address,
                        opt => opt.MapFrom(src => new Domain.Entities.Address
                        {

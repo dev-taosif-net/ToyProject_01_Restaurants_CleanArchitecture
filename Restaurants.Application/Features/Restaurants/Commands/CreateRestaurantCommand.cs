@@ -1,9 +1,12 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
+using Restaurants.Domain.Repositories;
 
-namespace Restaurants.Application.Features.Restaurants.Dtos;
+namespace Restaurants.Application.Features.Restaurants.Commands;
 
-public class CreateRestaurantDto 
+public class CreateRestaurantCommand : IRequest<int>
 {
     public string Name { get; set; } = default!;
     public string Description { get; set; } = default!;
@@ -16,10 +19,10 @@ public class CreateRestaurantDto
     public string? PostalCode { get; set; }
 }
 
-public class CreateRestaurantDtoValidator : AbstractValidator<CreateRestaurantDto>
+public class CreateRestaurantCommandValidator : AbstractValidator<CreateRestaurantCommand>
 {
-    private readonly List<string> validCategories = ["Italian", "Mexican", "Japanese", "American", "Indian"];
-    public CreateRestaurantDtoValidator()
+    private readonly List<string> validCategories = ["Italian", "Mexican", "Japanese", "American", "Indian" , "Bangladeshi"];
+    public CreateRestaurantCommandValidator()
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Description).NotEmpty().MaximumLength(500);
@@ -32,5 +35,21 @@ public class CreateRestaurantDtoValidator : AbstractValidator<CreateRestaurantDt
         RuleFor(x => x.City).MaximumLength(100).When(x => !string.IsNullOrEmpty(x.City));
         RuleFor(x => x.Street).MaximumLength(200).When(x => !string.IsNullOrEmpty(x.Street));
         RuleFor(x => x.PostalCode).MaximumLength(20).When(x => !string.IsNullOrEmpty(x.PostalCode));
+    }
+}
+
+
+
+public class CreateRestaurantCommandHandler(IRestaurantsRepository restaurantsRepository, ILogger<CreateRestaurantCommandHandler> logger,
+    IMapper mapper) : IRequestHandler<CreateRestaurantCommand, int>
+{
+    public async Task<int> Handle(CreateRestaurantCommand request, CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Creating a new restaurant");
+        var restaurantEntity = mapper.Map<Domain.Entities.Restaurant>(request);
+
+        var id = await restaurantsRepository.CreateAsync(restaurantEntity);
+
+        return id;
     }
 }
