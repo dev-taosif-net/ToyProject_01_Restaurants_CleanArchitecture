@@ -25,6 +25,12 @@ namespace Restaurants.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRestaurant([FromBody] CreateRestaurantDto createRestaurant)
         {
+            //Default model validation
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(createRestaurant);
+            }
+
             var id = await restaurantService.CreateRestaurantAsync(createRestaurant);
             return CreatedAtAction(nameof(GetRestaurantById), new { id = id }, null);
         }

@@ -14,7 +14,7 @@ POST {{Restaurants.API_HostAddress}}/api/restaurants
 Content-Type: application/json
 
 {
-  //CreateRestaurantDto
+
 }
 
 ###
