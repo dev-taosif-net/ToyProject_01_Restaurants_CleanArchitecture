@@ -23,12 +23,11 @@ await seeder.Seed();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseOpenApi(); // Optional, for NSwag middleware to serve the document
+    app.UseOpenApi(); 
     app.UseSwaggerUi(options =>
     {
-        // Point NSwag UI to your OpenAPI endpoint
         options.DocumentPath = "/openapi/v1.json";
-        options.Path = "/swagger"; // UI available at /swagger
+        options.Path = "/swagger"; 
     });
 }
 
