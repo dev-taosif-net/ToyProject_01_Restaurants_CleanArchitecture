@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Builder;
+using Restaurants.Application.Extensions;
 using Restaurants.Infrastructure.Extensions;
 using Restaurants.Infrastructure.Seeders;
-using Restaurants.Application.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,13 @@ await seeder.Seed();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseOpenApi(); // Optional, for NSwag middleware to serve the document
+    app.UseSwaggerUi(options =>
+    {
+        // Point NSwag UI to your OpenAPI endpoint
+        options.DocumentPath = "/openapi/v1.json";
+        options.Path = "/swagger"; // UI available at /swagger
+    });
 }
 
 app.UseHttpsRedirection();
