@@ -16,7 +16,7 @@ namespace Restaurants.API.Controllers
             return Ok(restaurants);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetRestaurantById([FromRoute] int id)
         {
             var restaurant = await mediator.Send(new GetRestaurantById() { Id = id });
@@ -27,19 +27,6 @@ namespace Restaurants.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRestaurant([FromBody] CreateRestaurantCommand command)
         {
-            //var validationResult = await _validator.ValidateAsync(createRestaurant);
-
-            //var validator = new CreateRestaurantDtoValidator();
-            //var validationResult = await validator.ValidateAsync(createRestaurant);
-
-            //if (!validationResult.IsValid)
-            //{
-            //    foreach (var error in validationResult.Errors)
-            //    {
-            //        ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-            //    }
-            //    //return BadRequest(ModelState);
-            //}
             ////Default model validation
             //if(!ModelState.IsValid)
             //{
@@ -48,6 +35,14 @@ namespace Restaurants.API.Controllers
 
             var id = await mediator.Send(command);
             return CreatedAtAction(nameof(GetRestaurantById), new { id }, null);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteRestaurant([FromRoute] int id)
+        {
+            var restaurant = await mediator.Send(new DeleteRestaurantCommand(id));
+
+            return restaurant == false ? BadRequest() : NoContent();
         }
 
     }
