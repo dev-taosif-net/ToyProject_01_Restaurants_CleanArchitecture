@@ -15,10 +15,17 @@ builder.Services.AddApplication();
 
 builder.Host.UseSerilog((context, configuration) =>
 {
-    configuration
-        .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
-        .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Information)
-        .WriteTo.Console( outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {SourceContext}{NewLine}?? {Message:lj}{NewLine}{Exception}");
+    configuration.ReadFrom.Configuration(context.Configuration);
+    //configuration
+    //    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+    //    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Information)
+    //    .WriteTo.Console( outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {SourceContext}{NewLine}?? {Message:lj}{NewLine}{Exception}")
+    //     .WriteTo.File(
+    //        path: "Logs/log.Restaurant-.log",                    
+    //        rollingInterval: RollingInterval.Day,      
+    //        retainedFileCountLimit: 7,
+    //        rollOnFileSizeLimit: true
+    //    );
 });
 
 
