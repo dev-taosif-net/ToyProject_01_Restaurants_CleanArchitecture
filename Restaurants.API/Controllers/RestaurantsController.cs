@@ -18,11 +18,12 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<RestaurantDto?>> GetRestaurantById([FromRoute] int id)
         {
             var restaurant = await mediator.Send(new GetRestaurantById() { Id = id });
-
-            return restaurant == null ? BadRequest() : Ok(restaurant);
+            return Ok(restaurant);
         }
 
         [HttpPost]
@@ -45,9 +46,9 @@ namespace Restaurants.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteRestaurant([FromRoute] int id)
         {
-            var restaurant = await mediator.Send(new DeleteRestaurantCommand(id));
+            await mediator.Send(new DeleteRestaurantCommand(id));
 
-            return restaurant == false ? BadRequest() : NoContent();
+            return NoContent();
         }
 
     }
