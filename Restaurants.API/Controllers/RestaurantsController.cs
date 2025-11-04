@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Features.Restaurants.Commands;
+using Restaurants.Application.Features.Restaurants.Dtos;
 using Restaurants.Application.Features.Restaurants.Queries;
 
 namespace Restaurants.API.Controllers
@@ -10,14 +11,14 @@ namespace Restaurants.API.Controllers
     public class RestaurantsController(IMediator mediator) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetAllRestaurants()
+        public async Task<ActionResult<IEnumerator<RestaurantDto>>> GetAllRestaurants()
         {
             var restaurants = await mediator.Send(new GetAllRestaurantsQuery());
             return Ok(restaurants);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetRestaurantById([FromRoute] int id)
+        public async Task<ActionResult<RestaurantDto?>> GetRestaurantById([FromRoute] int id)
         {
             var restaurant = await mediator.Send(new GetRestaurantById() { Id = id });
 
@@ -25,6 +26,8 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateRestaurant([FromBody] CreateRestaurantCommand command)
         {
             ////Default model validation
@@ -38,6 +41,8 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteRestaurant([FromRoute] int id)
         {
             var restaurant = await mediator.Send(new DeleteRestaurantCommand(id));
