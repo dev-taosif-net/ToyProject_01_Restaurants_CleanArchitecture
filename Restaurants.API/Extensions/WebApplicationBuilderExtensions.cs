@@ -9,6 +9,7 @@ public static class WebApplicationBuilderExtensions
 {
     public static void AddPresentation(this WebApplicationBuilder builder)
     {
+        builder.Services.AddAuthentication();
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
         builder.Services.AddOpenApiDocument(config =>
