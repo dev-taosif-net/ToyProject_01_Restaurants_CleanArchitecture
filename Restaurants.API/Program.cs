@@ -4,6 +4,9 @@ using Restaurants.Domain.Entities;
 using Restaurants.Infrastructure.Extensions;
 using Restaurants.Infrastructure.Seeders;
 using Serilog;
+using NSwag;
+using NSwag.Generation.Processors.Security;
+using NSwag.AspNetCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +14,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApiDocument(config =>
+{
+    config.Title = "Restaurants API";
+
+    // Add JWT support
+    config.AddSecurity("JWT", Array.Empty<string>(), new OpenApiSecurityScheme
+    {
+        Type = OpenApiSecuritySchemeType.ApiKey,
+        Name = "Authorization",
+        In = OpenApiSecurityApiKeyLocation.Header,
+        Description = "Enter: Bearer {your token}"
+    });
+
+    config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+});
+
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
@@ -22,16 +40,7 @@ builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
 builder.Host.UseSerilog((context, configuration) =>
 {
     configuration.ReadFrom.Configuration(context.Configuration);
-    //configuration
-    //    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
-    //    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Information)
-    //    .WriteTo.Console( outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {SourceContext}{NewLine}?? {Message:lj}{NewLine}{Exception}")
-    //     .WriteTo.File(
-    //        path: "Logs/log.Restaurant-.log",                    
-    //        rollingInterval: RollingInterval.Day,      
-    //        retainedFileCountLimit: 7,
-    //        rollOnFileSizeLimit: true
-    //    );
+
 });
 
 
@@ -49,16 +58,15 @@ app.UseMiddleware<RequestTimeLoggingMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
+    app.UseOpenApi();    
+    app.UseSwaggerUi();
 }
 
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
-app.MapIdentityApi<User>();
+app.MapGroup("api/identity/").MapIdentityApi<User>();
 app.UseAuthorization();
 
 app.MapControllers();
