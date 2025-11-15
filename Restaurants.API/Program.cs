@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
@@ -48,13 +49,9 @@ app.UseMiddleware<RequestTimeLoggingMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseOpenApi();
-    app.UseSwaggerUi(options =>
-    {
-        options.DocumentPath = "/openapi/v1.json";
-        options.Path = "/swagger";
-        options.DocExpansion = "list";
-    });
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
 }
 
 app.UseSerilogRequestLogging();
