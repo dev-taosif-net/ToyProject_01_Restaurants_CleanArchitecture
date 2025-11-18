@@ -27,14 +27,17 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseOpenApi();
-    app.UseSwaggerUi();
+    app.UseSwaggerUi(options =>
+    {
+        options.DocExpansion = "list";
+    });
 }
 
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
-app.MapGroup("api/identity/").MapIdentityApi<User>();
+app.MapGroup("api/identity/").WithTags("Identity").MapIdentityApi<User>();
 app.UseAuthorization();
 
 app.MapControllers();
