@@ -29,6 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseOpenApi();
     app.UseSwaggerUi(options =>
     {
+        options.DefaultModelsExpandDepth = -1;  //No schema will show by default
         options.DocExpansion = "list";
     });
 }
