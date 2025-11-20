@@ -38,7 +38,7 @@ app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
-app.MapGroup("api/identity/").WithTags("Identity").MapIdentityApi<User>();
+app.MapGroup("api/Identity/").WithTags("Identity").MapIdentityApi<User>();
 app.UseAuthorization();
 
 app.MapControllers();
