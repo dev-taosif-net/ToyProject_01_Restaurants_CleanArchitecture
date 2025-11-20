@@ -22,7 +22,7 @@ namespace Restaurants.API.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult<RestaurantDto?>> GetRestaurantById([FromRoute] int id)
         {
             var restaurant = await mediator.Send(new GetRestaurantById() { Id = id });
