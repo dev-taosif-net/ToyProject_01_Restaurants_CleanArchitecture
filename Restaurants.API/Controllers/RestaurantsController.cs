@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Features.Restaurants.Commands;
 using Restaurants.Application.Features.Restaurants.Dtos;
 using Restaurants.Application.Features.Restaurants.Queries;
+using Restaurants.Domain.Constants;
 
 namespace Restaurants.API.Controllers
 {
@@ -13,6 +14,7 @@ namespace Restaurants.API.Controllers
     public class RestaurantsController(IMediator mediator) : ControllerBase
     {
         [HttpGet]
+        [Authorize(Roles = UserRoles.Owner)]
         public async Task<ActionResult<IEnumerator<RestaurantDto>>> GetAllRestaurants()
         {
             var restaurants = await mediator.Send(new GetAllRestaurantsQuery());
