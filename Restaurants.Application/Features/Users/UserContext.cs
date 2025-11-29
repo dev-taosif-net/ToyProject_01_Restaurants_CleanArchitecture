@@ -18,7 +18,7 @@ public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContex
             throw new InvalidOperationException("No HttpContext or User available");
         }
 
-        if (user.Identity == null || !user.Identity.IsAuthenticated)
+        if (user.Identity is not { IsAuthenticated: true })
         {
             return null;
         }

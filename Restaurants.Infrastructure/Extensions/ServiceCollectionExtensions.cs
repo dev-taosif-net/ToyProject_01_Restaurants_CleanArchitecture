@@ -22,10 +22,14 @@ public static class ServiceCollectionExtensions
             .AddRoles<IdentityRole>()
             .AddClaimsPrincipalFactory<RestaurantsUserClaimsPrincipalFactory>()
             .AddEntityFrameworkStores<RestaurantsDbContext>();
+        
+        // services.AddAuthorization(options => options.AddPolicy("AdministratorOnly", policy => policy.RequireRole("Administrator")));
+        services.AddAuthorization(options => options.AddPolicy(PolicyNames.HasNationality, policy => policy.RequireClaim("Nationality" , "Bangladeshi") ));
 
         services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
         services.AddScoped<IRestaurantsRepository, RestaurantsRepository>();
         services.AddScoped<IDishesRepository, DishesRepository>();
+        
 
     }
 }

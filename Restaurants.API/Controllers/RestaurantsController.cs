@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Features.Restaurants.Commands;
@@ -6,6 +7,7 @@ using Restaurants.Application.Features.Restaurants.Dtos;
 using Restaurants.Application.Features.Restaurants.Queries;
 using Restaurants.Application.Features.Users;
 using Restaurants.Domain.Constants;
+using Restaurants.Infrastructure.Authorization;
 
 namespace Restaurants.API.Controllers
 {
@@ -26,7 +28,7 @@ namespace Restaurants.API.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[AllowAnonymous]
+        [Authorize(Policy = PolicyNames.HasNationality)]
         public async Task<ActionResult<RestaurantDto?>> GetRestaurantById([FromRoute] int id)
         {
             var user = userContext.CurrentUser();
