@@ -23,11 +23,11 @@ public class UpdateUserDetailsCommandHandler(ILogger<UpdateUserDetailsCommandHan
 
         logger.LogInformation("Updating user: {UserId}, with {@Request}", user!.Id, request);
 
-        var dbUser = await userStore.FindByIdAsync(user!.Id, cancellationToken);
+        var dbUser = await userStore.FindByIdAsync(user.Id, cancellationToken);
 
         if (dbUser == null)
         {
-            throw new NotFoundException(nameof(User), user!.Id);
+            throw new NotFoundException(nameof(User), user.Id);
         }
 
         dbUser.Nationality = request.Nationality;

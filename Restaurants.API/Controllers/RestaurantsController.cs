@@ -14,7 +14,8 @@ namespace Restaurants.API.Controllers
     public class RestaurantsController(IMediator mediator) : ControllerBase
     {
         [HttpGet]
-        [Authorize(Roles = UserRoles.Owner)]
+        [Authorize(Roles = $"{UserRoles.Owner},{UserRoles.Admin}")]
+
         public async Task<ActionResult<IEnumerator<RestaurantDto>>> GetAllRestaurants()
         {
             var restaurants = await mediator.Send(new GetAllRestaurantsQuery());
