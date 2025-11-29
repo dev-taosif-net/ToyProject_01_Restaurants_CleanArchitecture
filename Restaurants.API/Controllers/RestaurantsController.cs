@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Features.Restaurants.Commands;
 using Restaurants.Application.Features.Restaurants.Dtos;
 using Restaurants.Application.Features.Restaurants.Queries;
+using Restaurants.Application.Features.Users;
 using Restaurants.Domain.Constants;
 
 namespace Restaurants.API.Controllers
@@ -11,7 +12,7 @@ namespace Restaurants.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class RestaurantsController(IMediator mediator) : ControllerBase
+    public class RestaurantsController(IMediator mediator, IUserContext userContext ) : ControllerBase
     {
         [HttpGet]
         [Authorize(Roles = $"{UserRoles.Owner},{UserRoles.Admin}")]
@@ -28,6 +29,8 @@ namespace Restaurants.API.Controllers
         //[AllowAnonymous]
         public async Task<ActionResult<RestaurantDto?>> GetRestaurantById([FromRoute] int id)
         {
+            var user = userContext.CurrentUser();
+            
             var restaurant = await mediator.Send(new GetRestaurantById() { Id = id });
             return Ok(restaurant);
         }
