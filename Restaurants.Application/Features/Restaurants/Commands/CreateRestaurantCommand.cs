@@ -2,6 +2,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Restaurants.Application.Features.Users;
 using Restaurants.Domain.Repositories;
 
 namespace Restaurants.Application.Features.Restaurants.Commands;
@@ -41,12 +42,13 @@ public class CreateRestaurantCommandValidator : AbstractValidator<CreateRestaura
 
 
 public class CreateRestaurantCommandHandler(IRestaurantsRepository restaurantsRepository, ILogger<CreateRestaurantCommandHandler> logger,
-    IMapper mapper) : IRequestHandler<CreateRestaurantCommand, int>
+    IMapper mapper , IUserContext userContext) : IRequestHandler<CreateRestaurantCommand, int>
 {
     public async Task<int> Handle(CreateRestaurantCommand request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Creating a new restaurant {@Restaurant}" , request);
         var restaurantEntity = mapper.Map<Domain.Entities.Restaurant>(request);
+        restaurantEntity.OwnerId = userContext.CurrentUser()!.Id;
 
         var id = await restaurantsRepository.CreateAsync(restaurantEntity);
 
