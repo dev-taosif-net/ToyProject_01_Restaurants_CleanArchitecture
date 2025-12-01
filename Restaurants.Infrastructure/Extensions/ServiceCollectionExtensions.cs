@@ -34,6 +34,8 @@ public static class ServiceCollectionExtensions
                 
                 options.AddPolicy(PolicyNames.MinimumAge,
                     policy => policy.AddRequirements(new MinimumAgeRequirement(18)));
+                options.AddPolicy(PolicyNames.CreatedAtleast2Restaurants,
+                  policy => policy.AddRequirements(new CreatedMultipleRestaurantsRequirement(2)));
             }
         );
         services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
