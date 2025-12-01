@@ -30,6 +30,16 @@ public class RestaurantsRepository(RestaurantsDbContext dbContext) : IRestaurant
         return restaurants ?? [];
     }
 
+    public async Task<IEnumerable<Restaurant>> GetAllMatchingAsync(string? searchText)
+    {
+        searchText = searchText?.ToLower();
+        
+        var restaurants = await dbContext.Restaurants.Where(x=> string.IsNullOrWhiteSpace(searchText) ||  x.Name.ToLower().Contains(searchText))
+            .Include(x=>x.Dishes)
+            .ToListAsync();
+        return restaurants ?? [];
+    }
+
     public async Task<Restaurant?> GetByIdAsync(int id)
     {
         var restaurant = await dbContext.Restaurants

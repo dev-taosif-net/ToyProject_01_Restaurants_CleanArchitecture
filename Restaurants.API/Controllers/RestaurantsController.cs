@@ -16,11 +16,11 @@ namespace Restaurants.API.Controllers
     public class RestaurantsController(IMediator mediator, IUserContext userContext ) : ControllerBase
     {
         [HttpGet]
-        [Authorize(Roles = $"{UserRoles.Owner},{UserRoles.Admin}")]
-
-        public async Task<ActionResult<IEnumerator<RestaurantDto>>> GetAllRestaurants()
+        // [Authorize(Roles = $"{UserRoles.Owner},{UserRoles.Admin}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerator<RestaurantDto>>> GetAllRestaurants([FromQuery]GetAllRestaurantsQuery query)
         {
-            var restaurants = await mediator.Send(new GetAllRestaurantsQuery());
+            var restaurants = await mediator.Send(query);
             return Ok(restaurants);
         }
 

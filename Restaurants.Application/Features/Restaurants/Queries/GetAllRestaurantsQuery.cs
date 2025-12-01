@@ -6,7 +6,7 @@ using Restaurants.Domain.Repositories;
 
 namespace Restaurants.Application.Features.Restaurants.Queries;
 
-public record GetAllRestaurantsQuery : IRequest<IEnumerable<RestaurantDto>>;
+public record GetAllRestaurantsQuery(string? searchPhrase) : IRequest<IEnumerable<RestaurantDto>>;
 
 public class GetAllRestaurantsQueryHandler(ILogger<GetAllRestaurantsQueryHandler> logger, IMapper mapper, IRestaurantsRepository restaurantsRepository)
     : IRequestHandler<GetAllRestaurantsQuery, IEnumerable<RestaurantDto>>
@@ -15,7 +15,7 @@ public class GetAllRestaurantsQueryHandler(ILogger<GetAllRestaurantsQueryHandler
     {
         logger.LogInformation("Getting all restaurants");
 
-        var restaurants = await restaurantsRepository.GetAllAsync();
+        var restaurants = await restaurantsRepository.GetAllMatchingAsync(request.searchPhrase);
 
         //var restaurantDtos = restaurants.Select(x => x.ToRestaurantDto());  //Manual
         var restaurantDtos = mapper.Map<IEnumerable<RestaurantDto>>(restaurants);
