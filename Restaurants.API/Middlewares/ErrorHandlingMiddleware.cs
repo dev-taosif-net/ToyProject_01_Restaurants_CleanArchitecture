@@ -19,6 +19,12 @@ public class ErrorHandlingMiddleware(ILogger<CreateRestaurantCommandHandler> log
 
             logger.LogWarning(notFound.Message);
         }
+        catch (ForbidException)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsJsonAsync("Access forbidden");
+
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "An unhandled exception has occurred while processing the request.");
